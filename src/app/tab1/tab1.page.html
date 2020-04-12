@@ -1,17 +1,28 @@
 <ion-header [translucent]="true">
   <ion-toolbar color="primary">
     <ion-title>
-      Tab 1
+      Feed
     </ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title color="primary" size="large">Feed</ion-title>
-    </ion-toolbar>
-  </ion-header>
 
-  <app-explore-container name="Tab 1 page"></app-explore-container>
-</ion-content>
+  <ion-card color="dark" *ngFor="let message of displayMessages">
+    <ion-card-header>
+      <ion-card-title>{{message.from}}</ion-card-title>
+      <ion-card-content>{{message.text}}</ion-card-content>
+    </ion-card-header>
+
+    <ion-card-content *ngIf="message.imageUrl" >
+      <ion-img src="{{message.imageUrl}}"> </ion-img>
+    </ion-card-content>
+
+    <div class="right">
+      <span> Posted on: {{message.createdOn | date: 'MM/dd/yy hh:mm'}}</span>
+    </div>
+  </ion-card>
+
+
+
+  </ion-content>

@@ -1,3 +1,27 @@
 ion-content ion-toolbar {
   --background: translucent;
 }
+
+ion-card-content {
+  padding: 10px;
+}
+
+ion-card-header {
+  padding-top: opx;
+}
+
+ion-card-title {
+  font-size: 22px;
+  font-weight: 400;
+  text-align: left;
+  font-family: Arial, Helvetica, sans-serif;
+  margin-bottom: 5px;
+}
+
+ion-card-subtitle{
+  font-weight: 300;
+}
+
+.right{
+  float: right;
+}
