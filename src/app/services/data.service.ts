@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { AngularFirestoreCollection, AngularFirestore } from 'angularfire2/firestore';
 import { map } from  'rxjs/operators'
 import { firestore } from 'firebase';
+import { Friend } from '../models/friend';
 
 @Injectable({
   providedIn: 'root'
@@ -13,9 +14,14 @@ export class DataService {
   allMessages: Observable<Message[]>;
   messageCollection: AngularFirestoreCollection<Message>; // pipeline to firebase database
 
+  allFriends: Observable<Friend[]>;
+  friendsCollection: AngularFirestoreCollection<Friend>; // pipeline to furebase datase
+
   constructor(private fb: AngularFirestore) {
     this.messageCollection = fb.collection<Message>('posts'); // initializa connecion app > firebase
-   }
+    this.friendsCollection = fb.collection<Friend>('friends'); // initialize connection
+  
+  }
 
 
    //// GOOD WAY TO READ DATA WITHOUT DATE /////
@@ -23,6 +29,10 @@ export class DataService {
 //   retrieveMessagesFromDB() {
 //     this.allMessages = this.messageCollection.valueChanges();
 //   }
+
+retrieveFriendsFromDB(){
+  this.allFriends = this.friendsCollection.valueChanges();
+} 
 
 retrieveMessagesFromDB(){
   this.allMessages = this.messageCollection.snapshotChanges().pipe(
@@ -49,4 +59,15 @@ retrieveMessagesFromDB(){
     this.retrieveMessagesFromDB(); // subscribe to changes
     return this.allMessages;
   }
+
+  public saveFriend(friend){
+    var plain = Object.assign({}, friend);
+    this.friendsCollection.add(plain);
+  }
+  
+  public getAllFriends(){
+    this.retrieveFriendsFromDB();
+    return this.allFriends;
+  }
+
 }

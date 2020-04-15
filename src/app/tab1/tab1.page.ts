@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { DataService } from '../services/data.service';
 import { Message } from '../models/message';
+import { SharedService } from '../services/shared.service';
 
 @Component({
   selector: 'app-tab1',
@@ -11,26 +12,32 @@ export class Tab1Page {
 
   displayMessages: Message[];
   
-  constructor(private data: DataService) {
+  constructor(private data: DataService, private shared: SharedService) {
     this.homework();
-    data.getAllMessages().subscribe( list => {
-      console.log ('obv emited value');
-      this.displayMessages = list.sort((left, right) => {
-        // return negative one when left should go first and positive for right
+    data.getAllMessages().subscribe(list => {
 
-        if(!left.createdOn) return 1; // if left doesnt have a date, it goes first
+      var filtered = [];
+      for(let i =0; i<list.length; i++){
+        var m = list[i];
+        if(m.to =="General" || m.to == shared.userName || m.from == shared.userName ){
+          filtered.push(m);
+        }
+      }
+      
+      this.displayMessages = filtered.sort((left, right) => {
+          if(!left.createdOn) return -1; // if left don't have a date, it goes first
 
-        if(left.createdOn > right.createdOn){
-          return -1;
-        }
-        else if (right.createdOn > left.createdOn){
-          return 1;
-        }
-        return 0;
-      });
+          if(left.createdOn > right.createdOn){
+            return -1;
+          }
+          else if(right.createdOn > left.createdOn){
+            return 1;
+          }
+          return 0;
+      })
     });
-  }
-  
+  } 
+
   homework(){
     var data =[
       {
